@@ -1,0 +1,31 @@
+import java.awt.Color;
+
+/**
+ * This class will be used to decorate Pizza Objects.  
+ * @author Miriam Mnyuku
+ */
+public class Pepper extends Vegetable
+{
+
+	/**
+	 * Constructor sets the description, cost to $0.17 and 13 calories
+	  */
+	public Pepper()
+	{
+		super("Pepper", new Money(0,17), 13, Color.GREEN);
+	}
+	
+	/**
+     * Prints out a pepper object
+     * 
+     * @param  none
+     * @return description, cost and calories, color 
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+    public String toString()
+	{
+		return super.toString() + "Green";
+	}
+	
+}
