@@ -1,0 +1,114 @@
+import java.awt.*;
+
+/** 
+ * Class Shape
+ * the superclass in our inheritance hierarchy
+ */
+class Shape implements Cloneable
+{
+	private int x = 0;
+	private int y = 0;
+	private String shapeType;
+	
+	/**
+     * constructor sets x, y
+     * @param  none
+     * @return none    
+     * precondition: none
+     * postcondition: new shape object is created
+     */
+    public Shape( int a, int b )
+	{
+	    x=a;
+		y=b;
+	}
+	
+	/**
+     * A getter for the area
+     * @param  none
+     * @return  double
+     * precondition: none
+     * postcondition: area
+     */
+    public double getArea()
+	{ 
+		return -1;
+	}
+	
+	/**
+     * A draws
+     * @param  Graphics g
+     * @return  none
+     * precondition: none
+     * postcondition: none
+     */
+    public void draw( Graphics g )
+	{
+		
+	}
+	
+	/**
+     * A getter for x
+     * @param  none
+     * @return  int
+     * precondition: none
+     * postcondition: none
+     */
+    public int getX()
+	{
+		return x; 
+	}
+	
+	/**
+     * A getter for y
+     * @param  none
+     * @return  int
+     * precondition: none
+     * postcondition: none
+     */
+    public int getY()
+	{
+		return y; 
+	}
+	
+	/**
+     * clone(): creates new shape object with the same internal state
+     * @param  none
+     * @return cloned object    
+     * precondition: none
+     * postcondition: new shape object is created with same internal state
+     */
+    public Shape clone()
+	{
+		return new Shape(x,y);
+	}
+	
+	/**
+     * Prints out a shape object
+     * 
+     * @param  none
+     * @return string shape
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+    public String toString()
+	{
+		return "shape:";
+	}
+	
+	//Getter for thet shape type
+	/**
+     * Prints out a shape object
+     * 
+     * @param  none
+     * @return string shape type
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+    public String getShapeType()
+	{
+		return shapeType;
+	}
+}
+
+
