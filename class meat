@@ -1,0 +1,24 @@
+/**
+ * This class will be used to decorate Pizza Objects.  
+ *  
+ * @author Miriam Mnyuku
+ */
+public class Meat extends Ingredient
+{
+	/**
+	 * Constructor that calls the parent class
+	 * sets description, cost and calories
+	 */
+	public Meat(String description, Money cost, int cal)
+	{
+		super(description, cost, cal);
+	}
+
+	/**
+	 * @returns description, cost and calories
+	 */
+	public String toString()
+	{
+		return "Meat:" + super.toString();
+	}	
+}
