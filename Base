@@ -1,0 +1,31 @@
+/**
+ * This class will be used to decorate Pizza Objects.  
+ * 
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Base extends Ingredient
+{	
+	
+	/**
+	 * Constructor that calls the parent class
+	 * sets description, cost and calories
+	 */
+	public Base(String description, Money cost, int cal)
+	{
+		super(description, cost, cal);
+	}
+	
+	/**
+     * Returns a String with the base
+     * value by calling super 
+     * @param  none
+     * @return  string   
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+    public String toString()
+	{
+		return "Base:" + super.toString(); 
+	}
+}
