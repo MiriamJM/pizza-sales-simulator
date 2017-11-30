@@ -1,0 +1,15 @@
+/**
+ * This class will be used to decorate Pizza Objects.  
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Marinara extends Base
+{
+	/**
+	 * Constructor sets the description, cost to $0.55 and 25 calories
+	 */
+	public Marinara()
+	{
+		super("Marinara", new Money(0,55), 25);
+	}
+}
