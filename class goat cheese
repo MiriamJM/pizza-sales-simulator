@@ -1,0 +1,16 @@
+/**
+ * This class will be used to decorate Pizza Objects.  
+ * 
+ * @author Miriam Mnyuku
+ */
+	public class Goat extends Cheese
+	{
+		/**
+		 * Constructor sets the description, cost to $3.50 and 45 calories
+		 */
+		public Goat()
+		{
+			super("Goat", new Money(3,50), 45);
+		}
+
+}
