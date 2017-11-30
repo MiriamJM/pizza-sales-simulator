@@ -1,0 +1,316 @@
+
+/**
+ *  ArrayList Class 
+ * 
+ * 
+ * @author Miriam Mnyuku
+ * @date 08/17/2017
+ */
+
+public class ArrayList<TBA> 
+{
+    //Private instance variables declared 
+    private int capacity = 100;
+    private Object[] data = new Object[capacity];
+    private int numElements = 0;
+
+    /**
+     * Calls the above constructor and passes
+     * in a value of 100 to set the initial capacity to 100
+     */
+    public ArrayList()
+    {
+                   
+    }
+
+    public ArrayList(ArrayList<TBA> other)
+    {
+        this.capacity = other.capacity;
+        this.numElements = other.numElements;
+        for(int i=0; i<other.numElements; i++){
+            this.data[i] = other.data[i];
+        }
+    }
+
+    /**
+     * This will resize the Array by doubling
+     * the length of the Object array
+     */
+    //Private resize method that increases size of array
+    //Create new array that's 10x larger and copy in data from old array
+    private void resize()
+    {
+        //Increasing by factor of 10
+        capacity = capacity * 2;
+        Object tempData[] = new Object[capacity];
+        //Copy old array into new array
+        for(int i = 0; i < numElements; i++)
+        {
+            tempData[i] = data[i];
+        }
+        data = tempData;
+    }
+
+    //Add function that redirects to insert
+    /**
+     * Method: add. puts an object in the last index of an array,if the array is full the reallocateArray()
+     *              creates more space for a new object
+     * 
+     * @param:  an object 
+     * @return: void
+     * precondition: Empty/full array
+     * postcondition: array filled with objects
+     */
+    public void add(TBA o)
+    {
+        insert(o, numElements);
+    }
+
+    /**
+     * Method: insert. puts an object in and array,if more objects are added
+     *         the previous object is moved to the next index and it's index
+     *         is replaced by a new object
+     * 
+     * @param:  an object and integer
+     * @return: void
+     * precondition: Empty array
+     * postcondition: array filled with objects
+     */
+    //Insert TBA object into data at index
+	public void insert(TBA o, int index){
+		//Invariants for object and index
+		if(o == null || index < 0 || index > numElements){
+			throw new PizzaException("Bad input");
+		}
+		
+		//Resize data array if reach max size
+		if(numElements == capacity){
+			//Call resize method to increase size
+			resize();
+		}
+		TBA that = (TBA) o;
+		
+		//Shift array to insert new TBA
+		arrayShiftRight(index);
+		data[index] = that;
+		//Increase number of elements after inserting new TBA
+		numElements++;
+	}
+
+    /**
+     * Shifts the elements in the object array to the right for inserting objects
+     */
+    private void arrayShiftRight(int index)
+    {
+        for(int i = numElements -1; i >= index; i--)
+        {
+            data[i+1] = data[i];      
+        }   
+    }
+
+    /**
+     * Shifts the elements in the object array to the left for removing
+     */
+    private Object arrayShiftLeft(int index)
+    {       
+        Object retVal = data[index];
+        for(int i = index; i < numElements - 1; i++)
+        {
+            data[i] = data[i + 1];          
+        }
+        //Return value that was overwritten
+		return retVal;
+    }
+    
+    //Set method that will write or overwrite value at index
+	/**
+     * Method: setter
+     * 
+     * @param:  TBA o, int index
+     * @return: none
+     * precondition: none
+     * postcondition:
+     * */
+     public void set(TBA o, int index)
+	{
+		//Check for bad index
+		if(index > numElements || index < 0){
+			throw new PizzaException("Bad index");
+		}
+		TBA that = (TBA) o;
+		//Set data to new TBA object
+		data[index] = that;
+	}
+    
+    //Get method that returns TBA object for an index
+	/**
+     * Method: getter
+     * 
+     * @param:  int index
+     * @return: TBA
+     * precondition: none
+     * postcondition:
+     * */
+     public TBA get(int index){
+		//Invariants for index
+		if(index > numElements || index < 0){
+			throw new PizzaException("Bad index");
+		}
+		//Cast return value as TBA object
+		return (TBA) data[index];
+	}
+
+    public void swap(int idx1, int idx2)
+    {
+        Object temp = data[idx1];
+        data[idx1] = data[idx2];
+        data[idx2] = temp;
+    }
+
+    /**
+     * This method removes the object in the array
+     * at the index in which that has been passed to us
+     * and @returns the object that has been removed
+     */
+    //Remove method that delete object by shifting array left to overwrite it
+	public TBA remove(int index)
+	{
+		//Index invariants
+		if(index < 0 || index >= data.length){
+			throw new PizzaException("Bad Index");
+		}
+		//Shift array left to overwrite
+		Object retval = arrayShiftLeft(index);
+		//Decrease number of elements
+		numElements--;
+		//Return TBA object
+		return (TBA) retval;
+	}
+
+    /**
+     * Method: size. gets the size of the arraylist.
+     * 
+     * @param:  none
+     * @return: integer
+     * precondition: none
+     * postcondition: returns a new value each time the arraylist is change and when the method is called
+     */
+    public int size()
+    {
+        return numElements;  
+    }
+
+    /**
+     * This toString method @returns [] if the number of elements are empty or
+     * @returns the object values in the array nicely displayed in a string like
+     * [object, object, object] etc.
+     */
+    public String toString()
+    {
+        String retVal = "";
+        if(isEmpty())
+        {
+            return  "";
+        }
+        else
+        {
+            //Iterates over array and prints out each TBA
+            for(int i = 0; i < numElements; i++)
+            {
+                retVal += data[i].toString() + "\n";     
+            }
+        }
+
+        return retVal;
+    }
+
+    /**
+     * This method checks to see if there any objects in the object array
+     */
+    public boolean isEmpty()
+    {
+        boolean retVal = false;
+        //checks if numElement is equal to 0
+        if(numElements == 0)
+        {
+            //if yes that means there are no comparable objects in the array
+            retVal = true;          
+        }
+        return retVal;
+    }
+
+    /**
+     * @returns the int value of the position of the object being passed in
+     * @returns -1 if not found
+     */
+    //Finds index of TBA
+	public int indexOf(TBA o){
+		//Invariant to see if passed object is null
+		if(o == null){
+			throw new PizzaException("Bad input");
+		}
+		//Iterate through array to find TBA
+		for(int i=0; i<numElements; i++){
+			if(data[i] == o) return i;
+		}
+		return -1;
+	}
+
+    /**
+     * @returns true of the object being passed
+     * in is present in the ArrayList
+     * @param:  an object
+     * @return: boolean
+     * precondition: none
+     * postcondition: none
+     */
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj == null)
+        {
+            throw new NullPointerException();
+        }
+
+        if(!(obj instanceof ArrayList<?> ))
+        {
+            throw new IllegalArgumentException("Invalid Paramater Type");
+        }
+
+        //Casting to an ArrayList
+        ArrayList<?> castedArrayList = (ArrayList<?>)obj;
+        if(size() == castedArrayList.size())
+        {
+            for(int i = 0; i < numElements; i++)
+            {       
+                //comparing 'this' object to 'that' object
+                if(!data[i].equals(castedArrayList.data[i]))
+                { 
+                    return false;
+                }           
+            }
+        }
+
+        return true;
+    }
+    
+    //Main to test ArrayList
+	public static void main(String[] args)
+	{
+		ArrayList<String> a = new ArrayList<String>();
+		
+		a.insert("uno",0);
+		a.insert("x",1);
+		a.add("U");
+		a.remove(0);
+		
+		System.out.println(a.toString());
+		
+		ArrayList<Pizza> pizzaList = new ArrayList<Pizza>();
+		
+		pizzaList.add(new Pizza());
+		
+	}
+
+}
+
