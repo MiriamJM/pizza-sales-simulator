@@ -1,0 +1,35 @@
+
+/**
+ * Write a description of class cheese here.
+ * 
+ * @author Miriam Mnyuku
+ * @version (a version number or a date)
+ */
+public class Cheese extends Ingredient
+{
+
+	/**
+	 * Constructor that calls the parent class
+	 * sets description, cost and calories
+	 */
+	public Cheese(String description, Money cost, int cal)
+	{
+		super(description, cost, cal);
+	}
+	
+	/**
+     * Prints out a Cheese object
+     * 
+     * @param  none
+     * @return description, cost and calories 
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+	 
+	public String toString()
+	{
+		return "Cheese:" + super.toString();
+	}
+
+}
+
