@@ -1,0 +1,167 @@
+/**
+ * This classes will be used to decorate Pizza Objects.  
+ * They’ll manage their cost and calorie count per serving, as well as define
+ * some custom characteristics (read member variables) like Colors for the 
+ * Vegetable subclass.  
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Ingredient implements Comparable<Ingredient>
+{
+	
+	//variable declaration
+	private Money cost;
+	private String description;
+	private int calories; 
+	 
+	/**
+	 * This constructor takes three args and sets 
+	 * description of the ingredient, cost and calories
+	 */
+	public Ingredient(String description, Money cost, int calorieCount)
+	{
+		this.description = description;
+		this.cost = cost;
+		this.calories = calorieCount;
+	}
+	
+	/**
+	 *
+     * Prints out a Money object, such as “$3.75”
+     * 
+     * @param  none
+     * @returns description, cost and calories 
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+	public String toString()
+	{
+		return description + " Cost:" + cost + " Calories:" + calories;
+	}
+	
+	/**
+	 * Accepts an object parameter from the 
+	 * class Object and casts it to the Money
+	 * class and compares and checks if it's 
+	 * equal to the dollars and cents and if equals
+	 * @returns true
+	 */
+	public boolean equals(Ingredient other)
+	{
+		if(other == null && !(other instanceof Ingredient)) 
+		{
+		    throw new PizzaException();
+		}
+		boolean isEqual = false;
+		Ingredient obj = (Ingredient)other;
+
+		if(this.cost == obj.cost &&
+				this.description.equals(obj.description) &&
+				this.calories == obj.calories)
+		{
+			isEqual = true;
+		}
+		
+		return isEqual;
+	}
+	
+	/**
+     * CompareTo: compares two money object to see which is bigger/smaller
+     *             based on dollar amount then cents
+     * @param  ingredient object
+     * @return interger  1,-1, or 0  
+     * precondition: none
+     * postcondition: compares two ingredients object 
+     * and return 1 if greater, -1 if less and 0 if they are equal
+	 *
+	 */
+	public int compareTo(Ingredient ingredient)
+	{
+		return cost.compareTo(ingredient.cost);
+	}
+	
+	//Setter for description
+	/**
+     * 
+     * @param  string
+     * @return  none   
+     * precondition: none
+     * postcondition: none
+     */
+    public void setDescription(String d){
+		description = d;
+	}
+	
+	//Getter for cost Money object
+	/**
+     * 
+     * @param  none
+     * @return  money object   
+     * precondition: none
+     * postcondition: none
+     */
+    public Money getCost() { //immutable
+		return cost;
+	}
+	
+	//Getter for Description
+	/**
+     * 
+     * @param  none
+     * @return  string   
+     * precondition: none
+     * postcondition: none
+     */
+    public String getDescription()
+    {
+		return description;
+	}
+	
+	//Setter for cost
+	/**
+     * 
+     * @param  none
+     * @return  object   
+     * precondition: none
+     * postcondition: none
+     */
+    public void setCost(Object o)
+    {
+		//Validate Money input object
+		if(o == null || !(o instanceof Money)){
+			throw new PizzaException("Invalid Cost");
+		}
+		Money m = (Money) o;
+		cost = m;
+	}
+	
+	//Getter for calories
+	/**
+     * 
+     * @param  none
+     * @return  integer   
+     * precondition: none
+     * postcondition: none
+     */
+    public int getCalories() { //immutable
+		return calories;
+	}
+	
+	//Setter for calories
+	/**
+     * 
+     * @param  integer
+     * @return  none   
+     * precondition: none
+     * postcondition: none
+     */
+    public void setCalories(int c) {
+		if(c <= 0){
+			throw new PizzaException("Invalid calories");
+		}
+		else{
+			calories = c;
+		}
+	}
+
+}
