@@ -1,0 +1,339 @@
+
+/**
+ * This class Money class contains dollars and cents as 
+ * private fields and returns those vales, sets those values and adds those
+ * 
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Money implements Comparable<Money>, Cloneable
+{
+
+    //Declaration of instance variables set to private
+    private int dollar;
+    private int cent;
+
+    /**
+     *  Default constructor sets both to zero
+     * @param  none
+     * @return none    
+     * precondition: none
+     * postcondition: new money object is created
+     */
+    public Money()
+    {
+        dollar = 0;
+        cent = 0;       
+    }
+
+    /**
+     * Constructor that calls the method which checks
+     * for validation and sets dollars and cents
+     */
+    public Money(int dol, int cent)
+    {
+        setMoney(dol,cent);
+    }
+
+    /**
+     * This Constructor takes in an int
+     * Parameter and calls the other constructor 
+     * for efficiency and code reduction
+     */
+    public Money(int value)
+    {
+        this(value, 0);
+    }
+
+    /**
+     * Copy Constructor that takes in an object
+     * as a parameter of type Money and
+     * Initializes the values
+     */  
+    public Money(Money other){
+        this(other.dollar, other.cent);
+    }
+
+    //Setter for dollars with invariants
+    /**
+     * 
+     * @param  integer dollar
+     * @return  none   
+     * precondition: none
+     * postcondition: will have any amount of dollar that is passed
+     */
+    public void setDollar(int d){
+        //Don't allow negative dollars and exit the program if passed negative dollars.
+        if(d < 0) {
+            System.out.println("Dollars can't be negative.  Please fix dollars");
+            System.exit(-1);
+        } else {
+            dollar = d;
+        }
+    }
+
+    //Setter for cents with invariants
+    /**
+     * 
+     * @param  integer cent
+     * @return none    
+     * precondition: none
+     * postcondition: will have any amount of dollar that is passed
+     */
+    public void setCent(int c){
+        //Can't have negative cents
+        if(c < 0) {
+            System.out.println("Cents can't be negative.  Please fix cents");
+            System.exit(-1);
+        }
+        //If pass > 99 cents, adds to dollar amount.  
+        else if(c > 99){
+            cent = c % 100;
+            dollar += (c - cent)/100;
+        } else {
+            cent = c;
+        }
+    }
+
+   
+    /**
+     * Getter for dollar
+     * 
+     * @param  none
+     * @return  dollar   
+     * precondition: none
+     * postcondition: none
+     */
+    public int getDollar() {
+        return dollar;
+    }
+
+    //Getter for cent
+    /**
+     * 
+     * @param  none
+     * @return  cents   
+     * precondition: none
+     * postcondition: none
+     */
+    public int getCent() {
+        return cent;
+    }
+
+    /**
+     * Sets our dollars and cents, accordingly 
+     * This function should also make use of setters for dollars and cents
+     * @param  integers dol, cent
+     * @return  none   
+     * precondition: none
+     * postcondition: holds money passed to it
+     */
+    public void setMoney(int dol, int cent)
+    {
+        if(dol < 0 || cent < 0)
+        {
+            throw new PizzaException();
+        }
+        this.dollar = dol;
+        if(cent > 100)
+        {
+            dol += cent/100;
+            cent = cent%100;
+        }
+        else
+        {
+            this.cent = cent;
+        }
+    }
+
+    /**
+     * A getter for the total monetary amount, as a double
+     * @param  none
+     * @return  dollar + cents 5.75, for example
+     * precondition: none
+     * postcondition: sum of dollar and cent in the form "5.57"
+     */
+    public double getMoney()
+    {
+        double cent = this.cent;
+        double getMoney = (cent * 0.01) + this.dollar;
+        getMoney = (double)Math.round(getMoney * 100) / 100;
+        return getMoney;
+    }
+
+    //Getter for the amount of dollars and cents
+	/**
+     * A getter for the total monetary amount, as a double
+     * @param  none
+     * @return  dollar + cents 5.75, for example
+     * precondition: none
+     * postcondition: sum of dollar and cent in the form "5.57"
+     */
+    public String getAmount(){ 	
+		return String.format("$%d.%d", dollar, cent);
+	}
+
+	//Setter for amount of dollars and cents
+	/**
+     * Sets our dollars and cents, accordingly 
+     * This function should also make use of setters for dollars and cents
+     * @param  integers dol, cent
+     * @return  none   
+     * precondition: none
+     * postcondition: holds money passed to it
+     */
+    public void setAmount(Money amount){
+		setDollar(amount.dollar);
+		setCent(amount.cent);
+	}
+
+    /**
+     * Adds the int passed into the function to dollars
+     * @param  integer dol
+     * @return  none   
+     * precondition: none
+     * postcondition: sum of dollar + dol
+     */
+    public void add(int dol)
+    {
+        add(dol, 0);
+    } 
+
+    /**
+     * Adds to dollars and cents the two ints passed into the function.
+     * @param  integers dol, cent
+     * @return none    
+     * precondition: none
+     * postcondition: sum of dollar and cent in decimal
+     */
+    public void add(int dol, int cent)
+    {
+
+        if(dol > -1 && cent > -1 && cent < 100)
+        {
+            this.dollar += dol;
+            this.cent += cent;
+
+        }
+        else
+        {
+            System.err.println("The Money values entered were invalid");
+            System.exit(-1);            
+        }
+
+    }
+
+    /**
+     * Adds to this object the dollars and cents stored in the other object.
+     * @param  other money object
+     * @return  none   
+     * precondition: original amount
+     * postcondition: original plus new amount
+     */
+    public void add(Money other)
+    {
+        add(other.dollar, other.cent);      
+    }
+
+    /**
+     * Accepts an object parameter from the 
+     * class Object and casts it to the Money
+     * class and compares and checks if it's 
+     * equal to the dollars and cents and if equals
+     * @returns true
+     */
+    public boolean equals(Object other)
+    {
+        if(other == null && !(other instanceof Money)) 
+        {
+            throw new PizzaException();
+        }
+        boolean isEqual = false;
+        Money moneyObj = (Money)other;
+
+        if(this.dollar == moneyObj.dollar&&
+        this.cent == moneyObj.cent)
+        {
+            isEqual = true;
+        }
+
+        return isEqual;
+    }
+
+    /**
+     * Returns a String with the money
+     * value by calling the getAmount() method
+     * @param  none
+     * @return  string   
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+    public String toString()
+    {
+        return getAmount();
+    }
+
+    /**
+     * CompareTo: compares two money object to see which is bigger/smaller
+     *             based on dollar amount then cents
+     * @param  Money object
+     * @return interger  1,-1, or 0  
+     * precondition: none
+     * postcondition: compares two money object and return 1 if greater, -1 if less and 0 if they are equal
+     */
+    public int compareTo(Money money)
+    {
+        if(money == null) 
+        {
+            throw new NullPointerException(); //null checker, throws exception
+        }
+
+        if(!(money instanceof Money)) 
+        {
+            throw new IllegalArgumentException(); //instanceof Checker
+        }
+
+        if(money.getMoney() < getMoney())
+        { //if "that".money < this.money
+            return 1; 
+        }
+        else if(money.getMoney() > getMoney())
+        {// if otherwise > 
+            return -1;
+        }
+        else
+        {
+            return 0; // they're equal
+        }
+    }
+
+    /**
+     * clone(): creates new money object with the same internal state
+     * @param  none
+     * @return cloned object    
+     * precondition: none
+     * postcondition: new money object is created with same internal state
+     */
+    @Override
+    public Money clone()
+    {
+        Money retVal = new Money(this);
+        return retVal;
+    }
+        
+    //Driver for money to test
+	public static void main(String[] args){
+		Money a = new Money(10);
+		Money money = new Money(1);
+		money.setCent(1000);
+		System.out.println(money.toString());
+		
+		Money b = a.clone();
+		
+		a.setCent(100);
+		
+		System.out.println(a.toString());
+		
+		System.out.println(b.toString());
+	}
+}
