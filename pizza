@@ -1,0 +1,351 @@
+import java.awt.Color;
+
+/* 
+ *This is the Pizza class that holds the attributes and methods of a Pizza
+ * Pizza Implements PizzaComparable so Pizzas can be compared with one another
+ *Pizza overrides toString to print out each of the attributes it has
+ *Pizza has an int that keeps count of calories but dynamically calculates
+ *the area and cost with get functions
+ *
+ ** @author Miriam Mnyuku 
+ * @date 08/16/2017
+ */
+public class Pizza implements PizzaComparable
+{
+    //Pizza attributes, most are complex data types
+    private Money cost = new Money(0,0);
+    private Fraction fraction = new Fraction();
+    private Shape myShape;
+    private int totalCalories = 0;
+    private ArrayList<Ingredient> ingredients = new ArrayList<Ingredient>();
+
+    /**
+     * A constructor that builds a Pizza with a random number of ingredients
+     * Uses Math.random and if statements to determine the specific attributes of a Pizza
+     **/
+    public Pizza() {
+        //Making Pizza Shape randomly a circle or square
+        if(Math.random() > 0.5){// sets either to Circle or Square
+            Circle c = new Circle((int)Math.random() * 100, (int)Math.random() * 10, Math.random() * 100);
+            myShape = c.clone();
+        }
+        else{
+            Square s = new Square((int)Math.random() * 100, (int)Math.random() * 100, Math.random() * 100);
+            myShape = s.clone();
+        }
+
+        //Making Random Base required
+        if(Math.random() > 0.5){
+            ingredients.add(new Marinara());
+        }
+        else{
+            ingredients.add(new Alfredo());
+        }
+
+        //Making Random Cheese required
+        if(Math.random() > 0.5){
+            ingredients.add(new Goat());
+        }
+        else{
+            ingredients.add(new Mozzarella());
+        }
+
+        //Making Meat optional
+        //1/3 time Sausage, 1/3 time Pepperoni, 1/3 time no meat
+        double meatSeed = Math.random();
+        if(meatSeed < 0.33){
+            ingredients.add(new Sausage());
+        }
+        else if(meatSeed > 0.33 && meatSeed < 0.66){
+            ingredients.add(new Pepperoni());
+        }
+
+        //Making Veggies optional
+        //1/3 time Pepper, 1/3 time Olive, 1/3 no veggies
+        double veggieSeed = Math.random();
+        //When selecting a Pepper, 1/2 time black and 1/2 time green
+        if(veggieSeed < 0.33){
+            if(Math.random() > 0.5){
+                ingredients.add(new Pepper());
+            }
+        }
+        //When selecting an Olive, 1/2 time green, 1/2 red
+        else if(veggieSeed > 0.33 && veggieSeed < 0.66){
+            if(Math.random() > 0.5){
+                ingredients.add(new Olive());
+            }
+        }
+
+        //Updating Pizza Object variables calories and initial cost of ingredients
+        int currentCents = 0;
+        int currentDollars = 0;
+        int ingredientCents = 0;
+        int ingredientDollars = 0;
+        //Looping through each ingredients in the ingredient Array List
+        for(int i = 0; i < ingredients.size(); i++){
+            totalCalories += ingredients.get(i).getCalories();
+            //System.out.println(ingredients.get(i).getDescription() + " Calories: " + ingredients.get(i).getCalories() + " Cost: " + ingredients.get(i).getCost());
+
+            currentCents = cost.getCent();
+            currentDollars = cost.getDollar();
+            ingredientCents = ingredients.get(i).getCost().getCent();
+            ingredientDollars = ingredients.get(i).getCost().getDollar();
+
+            cost.setDollar(currentDollars+ingredientDollars);
+            cost.setCent(currentCents+ingredientCents);
+        }
+    }
+
+    /**
+     * This method sets the remaining pizza that is left
+     * @param:  a Fraction f as input and calculates based
+     * off of the Fraction the user inputs of how much they want to eat from the pizza
+     * @return: boolean
+     * precondition: none
+     * postcondition: none
+     */
+    public void setRemaining(Fraction f){
+        double rate = cost.getMoney() / fraction.getDoubleVal(); // sets the rat of the pizza
+        try{
+            if(this.fraction.sub(f).getDoubleVal() < 0) throw new PizzaException();
+            this.fraction = this.fraction.sub(f); // subtracts and sets the fraction
+        }
+        catch(Exception e){
+            System.out.println("not enough pizza left to eat");
+            return;
+        }
+
+        if(this.fraction.getDoubleVal() == 0) throw new PizzaException(); // throw exception if it == 0
+        double doubleVal = fraction.getDoubleVal() * rate; // Multiply by the rate
+        String cost = doubleVal + ""; // Concatenate to a string
+        String[] collapse = cost.split("\\."); // split it into a string 
+
+        int dol = Integer.parseInt(collapse[0]); // get the dollar value and set to dol
+        int cent = Integer.parseInt(collapse[1].substring(0,2)); // get the cent value and set to cent
+
+        this.cost = new Money(dol, cent); // set the new money value 
+        totalCalories = totalCalories - (int)(f.getDoubleVal() * totalCalories); // update the total calories 
+
+    }
+
+    /**
+     * @returns a new Fraction of the remainng
+     * @return: fraction
+     * precondition: none
+     * postcondition: none
+     */
+    public Fraction getRemaining()
+    {
+        return new Fraction(fraction);
+    }
+
+    /**
+     *  
+     * Method: calculates Remaining Area
+     * 
+     * @param:  none
+     * @return: double
+     * precondition: none
+     * postcondition: none
+     */
+    public double getRemainingArea(){
+        //Obtain the numerator and denominator of size fraction that contains fraction of pizza left
+        double numAvail = (double) fraction.getNumerator();
+        double denomAvail = (double) fraction.getDenominator();
+        //Divide numerator and denominator as doubles for accuracy
+        double amountAvail = numAvail/denomAvail;
+        //System.out.println("amountAvail: " + amountAvail);
+
+        //Calculate remaining area by obtaining the starting area with getArea() and
+        //multiplying that by the fraction remaining
+        return myShape.getArea() * amountAvail;
+    }
+
+    /**
+     * Method: calculates current cost of pizza
+     * @return the cost, uses clone to avoid privacy leaks
+     * precondition: none
+     * postcondition: none
+     */
+    public Money getCost()
+    {
+        //return (Money)cost.clone();
+        //Obtain the numerator and denominator of size fraction that contains fraction of pizza left
+        double numAvail = (double) fraction.getNumerator();
+        double denomAvail = (double) fraction.getDenominator();
+        //Divide numerator and denominator as doubles for accuracy
+        double amountAvail = numAvail/denomAvail;
+        //System.out.println("amountAvail: " + amountAvail);
+
+        //Obtain cost of whole pizza with current ingredients
+        double currentCost = Double.parseDouble(cost.getDollar() + "." + cost.getCent());
+
+        //Determine new cost by multiplying original cost and fraction remaining
+        double newCost = currentCost * amountAvail;
+
+        //Splitting value of double into dollars and cents strings
+        //Use regex to split on '.'
+        //Split returns an array of results
+        String[] newAmount = String.valueOf(newCost).split("\\.");
+        //Dollars is the first item in array
+        String newDollars = newAmount[0];
+        //Cents is the second entry in array
+        //Append some 0's so that the next substring doesn't encounter
+        //an index out of bounds error for cents of single digits
+        String newCents = newAmount[1] + "0000";
+        newCents = newCents.substring(0, 2);
+
+        //Return new Money object that holds the current cost of a pizza
+        return new Money(Integer.parseInt(newDollars), Integer.parseInt(newCents));
+    }
+
+    /**
+     * Method: reduce the fraction of pizza remaining fraction of a pizza by the passed fraction amount
+     * 
+     * @param:   fraction amount
+     * @return: none
+     * precondition: none
+     * postcondition: none
+     */
+    public void eatSomePizza(Fraction amt){
+        //Check for valid Fraction passed
+        if(amt == null || !(amt instanceof Fraction)){
+            throw new PizzaException("Invalid Fraction passed for eating some pizza");
+        }
+        Fraction amount = (Fraction) amt;
+
+        //Subtract passed Fraction
+        fraction.sub(amount);
+        //If numerator is negative, which is how I determine negatives in my fractions,
+        //throw new exception as can't have negative amount of pizza
+        if(fraction.getNumerator() < 0){
+            throw new PizzaException("No available pizza");
+        }
+        //If passed amount is the same as the current Fraction amount, then someone buys the remaining pizza
+        //Throwing exception that the calling function catches
+        else if(fraction.getNumerator() == 0){
+            cost = new Money(0,0);
+            myShape.getArea();
+            throw new PizzaException("Pizza has been eaten and will be removed from the Pizza list!");
+        }
+    }
+
+    /**
+     * Method: Set Shape method that calls clone to avoid privacy leaks
+     * 
+     * @param:  Shape s
+     * @return: none
+     * precondition: none
+     * postcondition: none
+     */
+    public void setShape(Shape s) {
+        myShape = (Shape) s.clone();
+    }
+
+    //Get shape method that calls clone to avoid privacy leaks
+    public Shape getShape() {
+        return (Shape) myShape.clone();
+    }
+
+    //Getter for Calories
+    public int getCalories()
+    {
+        return totalCalories;
+    }
+
+    //Getters & setters for the Fractional amount of the pizza remaining
+    public Fraction getFraction()
+    {
+        return fraction;
+    }
+
+    @Override
+    /**This toString method @returns a String of the price,
+     * calories,fraction,area,and shapes
+     * postcondition: This does not work as it should i couldn't figure out why
+     */
+    public String toString()
+    {
+        return "Pizza has a price:" + cost.getAmount() + " and calories:" + totalCalories +
+        " Fraction remaining:" + fraction.toString() +
+        " and area left: " + (myShape.getArea() * fraction.getDoubleVal()) + " and " + myShape.toString();         
+    }
+
+    @Override
+    /**
+     * CompareTo method for price
+     * This allows pizza comparisions in terms of price
+     */
+    public int compareTo(Object o) {
+        //Check for valid input
+        if(o == null || !(o instanceof Pizza)){
+            throw new PizzaException("Invalid money");
+        }
+        Pizza that = (Pizza) o;
+        return this.getCost().compareTo(that.getCost());
+    }
+
+    @Override
+    /**
+     * Compare to on Size, allows pizzas to be compared to with size
+     *
+     */
+    public int compareToBySize(Object o) {
+        //Check for valid input
+        if(o == null || !(o instanceof Pizza)){
+            throw new PizzaException("Invalid size");
+        }
+        Pizza that = (Pizza) o;
+        //return this.size.compareTo(that.size);
+        if(this.myShape.getArea() < that.myShape.getArea())
+        {
+            return -1;
+        }
+        else if(this.myShape.getArea() > that.myShape.getArea())
+
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    @Override
+    /**
+     * Compare to on Calories, allows pizzas to be compared in terms of calories
+     *
+     */
+    public int compareToByCalories(Object o)
+    {
+        //Check for valid input
+        if(o == null || !(o instanceof Pizza))
+        {
+            throw new PizzaException("Invalid size");
+        }
+        Pizza that = (Pizza) o;
+
+        if(this.totalCalories < that.totalCalories)
+        {
+            return -1;
+        }
+        else if(this.totalCalories > that.totalCalories)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    //Main used for testing Pizzas
+    public static void main(String[] args){
+        Pizza p = new Pizza();
+
+        System.out.println(p.ingredients);
+        System.out.println(p.toString());
+
+    }
+}
