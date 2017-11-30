@@ -1,0 +1,17 @@
+/**
+ * This class will be used to decorate Pizza Objects.  
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Sausage extends Meat
+{
+
+	/**
+	 * Constructor sets the description, cost to $4.75 and 430 calories
+	 */
+	public Sausage()
+	{
+		super("Sausage", new Money(4,75), 430);
+	}
+
+}
