@@ -1,0 +1,31 @@
+import java.awt.Color;
+/**
+ * Olive class will be used to decorate Pizza Objects.  
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Olive extends Vegetable
+{
+		
+	/**
+	 * Constructor sets the description, cost to $0.36 and 52 calories
+	  */
+	public Olive()
+	{
+		super("Olive", new Money(0,36), 52, Color.BLACK);
+	}
+	
+	/**
+     * Prints out a olive object
+     * 
+     * @param  none
+     * @return description, cost and calories, color
+     * precondition: none
+     * postcondition: (override)customized string
+     */
+    public String toString()
+	{
+		return super.toString() + "Black";
+	}
+
+}
