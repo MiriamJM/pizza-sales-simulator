@@ -1,0 +1,17 @@
+/**
+ * This class will be used to decorate Pizza Objects.  
+ *
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Mozzarella extends Cheese
+{
+	/**
+	 * Constructor sets the description, cost to $5.50 and 700 calories
+	 */
+	public Mozzarella()
+	{
+		super("Mozzarella", new Money(5,50), 700);
+	}
+
+}
