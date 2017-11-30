@@ -1,0 +1,31 @@
+/**
+ * LinkedListException with extends RuntimeException 
+ * therefore inheriting all the functionalities of 
+ * RunTimeException. 
+ * 
+ * @author Miriam Mnyuku
+ */
+public class PizzaException extends RuntimeException 
+{
+	
+	
+	/**
+	 * Constructor that accepts an argument
+	 * of type String and passes it in to 
+	 * parent class which prints the error message
+	 */
+	public PizzaException(String note)
+	{
+		super(note);		
+	}
+	
+	/**
+	 * Constructor that calls the parent class
+	 * with no args, default Constructor
+	 */
+	public PizzaException()
+	{
+		super();	
+	}
+
+}
