@@ -1,0 +1,105 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+/**
+ * Circle class inherits from it's parent class Shape
+ * which has the basic functionalities for a general shape. 
+ * 
+ * @author Miriam Mnyuku
+ */
+public class Circle extends Shape
+{
+
+    private double radius; //initialization of private fields 
+
+    /**
+     * This Circle constructor accepts an argument in
+     * its parameter and calls the parent class to initialize
+     * its x and y coordinates
+     */
+    public Circle(int x, int y, double r){
+        super(x, y);//call constructor
+        setRadius(r);
+    }
+
+    /**
+     * This method computes the area 
+     * and @returns the area of the circle
+     * of type double
+     */
+    public double getArea()
+    {
+
+        double area = Math.PI * (this.radius * this.radius);
+        return area;
+
+    }
+
+    /**
+     * This method takes in a Graphics g as an argument and
+     * will draw the shape onto the Graphics context g or g2D
+     */
+    public void draw(Graphics g)
+    {	
+        //checks for null and instance of the Graphics class
+        if(g != null && g instanceof Graphics)
+        {
+            Graphics2D g2d = (Graphics2D)g;
+
+            int x = getX();
+            int y = getY();
+
+            g2d.setColor( Color.GREEN );//sets the color to green
+            //we draw using drawlOval but because the radius is 
+            //given twice as height & weight a circle is the result
+            g2d.drawOval(x, y, (int)this.radius, (int)this.radius);
+        }
+        else
+        {		
+            //prints error message if invalid args
+            System.err.println("Paramater is either null or not an instance of Graphics class");
+        }
+
+    }
+
+    /**
+     * This accessor method @returns 
+     * the radius of type double 
+     */
+
+    public double getRadius()
+    {
+        return radius;
+    }
+
+    /**
+     * This method accepts an argument of type
+     * double to initialize the radius
+     */
+    public void setRadius(double radius)
+    {	
+        this.radius = radius;
+    } 
+
+    public int compareTo(Circle o)
+    {
+        if(o.getArea() == getArea()){
+            return 0;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    @Override 
+    public Circle clone()
+    {
+        return new Circle(getX(), getY(), radius);
+    }
+
+    public String toString()
+    {
+        return super.toString() + "Circular";
+    }
+
+}
